@@ -27,16 +27,13 @@ dropZones.forEach((dropZone, index) => {
 
 dropZones.forEach((dropZone, index) => {
   dropZone.addEventListener("drop", (event) => {
+    event.preventDefault();
     const draggableItemId = event.dataTransfer.getData("draggableItemId");
     const draggableItem = document.querySelector(`#${draggableItemId}`);
     draggableItem.style.position = "absolute";
 
     let offsetX = event.offsetX - innerX + "px";
     let offsetY = event.offsetY - innerY + "px";
-
-    if (offsetX !== event.offsetX && offsetY !== event.offsetY) {
-      console.log(event.offsetX, event.offsetY);
-    }
 
     if (event.offsetX > 320 && event.offsetY < 80) {
       draggableItem.style.top = "0px";
@@ -68,5 +65,19 @@ dropZones.forEach((dropZone, index) => {
     }
 
     event.target.appendChild(draggableItem);
+  });
+
+  dropZone.addEventListener("dragleave", (event) => {
+    if (event.target.classList.contains("draggable-item")) {
+      console.log(event.layerY);
+      if (
+        event.layerX > 90 ||
+        event.layerX < 0 ||
+        event.layerY < 0 ||
+        event.layerY > 90
+      ) {
+        event.target.remove();
+      }
+    }
   });
 });
